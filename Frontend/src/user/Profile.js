@@ -32,7 +32,7 @@ function Profile() {
 
   return (
     <div>
-      <div className="text-center py-5">
+      <div className="text-right py-5 px-14">
         <button
           className="bg-red-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           onClick={handleLogout}
@@ -41,7 +41,16 @@ function Profile() {
         </button>
       </div>
 
-      {userDetails ? <Dashboard /> : <SignIn />}
+      {userDetails ? (
+        <div>
+          <h1 className="font-bold text-center text-2xl">
+            Welcome {userDetails.name.toUpperCase()}
+          </h1>
+          <Dashboard />
+        </div>
+      ) : (
+        <SignIn />
+      )}
     </div>
   );
 }
