@@ -1,12 +1,23 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
+import moment from "moment";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  FaTrash,
+  FaPenNib,
+  FaPlus,
+  FaAlignJustify,
+  FaSort,
+} from "react-icons/fa";
 
 function TodoList() {
   const [todosData, setTodosData] = useState("");
   const [taskData, setTaskData] = useState("");
   const [taskId, setTaskId] = useState("");
+
+  //Sort
+  const [order, setOrder] = useState("ASC");
 
   const fetchUserData = async () => {
     const response = await axios.get("/getAllTodos");
@@ -139,6 +150,29 @@ function TodoList() {
     }
     console.log(response);
   };
+  const sorting = (a, b) => {
+    if (order === "ASC") {
+      const sorted = [...todosData].sort((a, b) => {
+        a = new Date(a).getTime();
+        b = new Date(b).getTime();
+
+        return b > a ? 1 : -1;
+      });
+      console.log(sorted);
+      setTodosData(sorted);
+      setOrder("DSC");
+    }
+    if (order === "DSC") {
+      const sorted = [...todosData].sort((a, b) => {
+        a = new Date(a).getTime();
+        b = new Date(b).getTime();
+        console.log(a);
+        return b < a ? 1 : -1;
+      });
+      setTodosData(sorted);
+      setOrder("ASC");
+    }
+  };
 
   return (
     <section className="m-auto p-1 text-grey-darkest">
@@ -150,6 +184,13 @@ function TodoList() {
           <table className="table-auto text-left whitespace-no-wrap">
             <thead>
               <tr>
+                <th
+                  onClick={() => sorting("createdAt")}
+                  className="px-4 py-3 title-font tracking-wider font-medium text-gray-900  bg-gray-100 rounded-tl rounded-bl cursor-pointer"
+                >
+                  Created At
+                  <FaSort className="flex flex-auto text-center" />
+                </th>
                 <th className="px-4 py-3 title-font tracking-wider font-medium  text-gray-900 font-semibold bg-gray-100 rounded-tl rounded-bl">
                   Title
                 </th>
@@ -172,14 +213,17 @@ function TodoList() {
                 todosData.map((todo) => (
                   <tr>
                     <td className="px-4 py-3 text-black font-bold text-md">
+                      {moment(todo.createdAt).format("MMM Do YYYY,h:mm:ss a")}
+                    </td>
+                    <td className="px-4 py-3 text-black font-bold text-md">
                       {todo.title}
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 text-center">
                       <button
                         onClick={() => addTaskToTodo(todo)}
                         className="text-blue-500 font-semibold"
                       >
-                        Add Tasks
+                        Add
                       </button>
                     </td>
                     <td className="px-4 py-3">
@@ -187,23 +231,23 @@ function TodoList() {
                         onClick={() => fetchTaskData(todo)}
                         className="text-blue-500 font-semibold"
                       >
-                        View Tasks
+                        View
                       </button>
                     </td>
-                    <td className="px-4 py-3">
+                    <td className="px-4 py-3 text-center">
                       <button
                         onClick={() => handleEdit(todo)}
                         className="text-green-700 font-semibold"
                       >
-                        Edit
+                        <FaPenNib />
                       </button>
                     </td>
-                    <td className="px-4 py-3 text-lg text-gray-900">
+                    <td className="px-4 py-3 text-lg text-gray-900 text-center">
                       <button
                         onClick={() => handleDelete(todo._id)}
                         className="text-red-500 font-semibold"
                       >
-                        Delete
+                        <FaTrash />
                       </button>
                     </td>
                   </tr>
