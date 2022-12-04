@@ -1,0 +1,14 @@
+Todo
+
+    title string
+    tasks [string]
+
+
+createTodoController
+getTodosController
+getTodoController
+
+deleteTodoController
+
+createTaskTodoController
+deleteTaskTodoController
