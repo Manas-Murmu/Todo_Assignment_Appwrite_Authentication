@@ -178,7 +178,7 @@ function TodoList() {
     <section className="m-auto p-1 text-grey-darkest">
       <div className="container px-5 py-1 mx-auto grid grid-cols-2">
         <div className="lg:w-2/2 w-full overflow-auto">
-          <h1 className="sm:text-3xl lg:w-3/4 text-2xl text-left font-medium title-font text-gray-900 mb-5">
+          <h1 className="sm:text-3xl lg:w-3/4 text-2xl text-left font-medium title-font text-gray-900 mb-5 mt-5">
             All Todos
           </h1>
           <table className="table-auto text-left whitespace-no-wrap">
@@ -257,7 +257,7 @@ function TodoList() {
         </div>
 
         <div className="lg:w-2/2 container ml-14">
-          <h1 className="sm:text-3xl lg:w-3/4 text-2xl font-medium title-font text-gray-900 mb-5">
+          <h1 className="sm:text-3xl lg:w-3/4 text-2xl font-medium title-font text-gray-900 mb-5 mt-5">
             Tasks
           </h1>
 
