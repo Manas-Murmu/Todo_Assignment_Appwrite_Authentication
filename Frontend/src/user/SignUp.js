@@ -30,6 +30,16 @@ function SignUp() {
     promise.then(
       function (response) {
         console.log(response);
+        toast.info("Registered Succesfully!", {
+          position: "bottom-right",
+          autoClose: 2000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+        });
         navigate("/Signin");
       },
       function (error) {

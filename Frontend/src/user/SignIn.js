@@ -19,6 +19,16 @@ function SignIn() {
     e.preventDefault();
     try {
       await account.createEmailSession(user.email, user.password);
+      toast.success("Login Succesful!", {
+        position: "bottom-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
       navigate("/profile");
     } catch (error) {
       console.log(error);

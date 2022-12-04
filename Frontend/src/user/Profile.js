@@ -24,6 +24,7 @@ function Profile() {
   const handleLogout = async () => {
     try {
       await account.deleteSession("current");
+
       navigate("/");
     } catch (error) {
       console.log(error);
