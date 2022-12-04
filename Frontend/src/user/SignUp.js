@@ -1,53 +1,42 @@
 import React, { useState } from "react";
+import { account } from "../appwrite/appwriteConfig";
 import { useNavigate } from "react-router-dom";
+import { v4 as uuidv4 } from "uuid";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-const BASEURL = "https://todoassignmentcrud-production.up.railway.app";
-
 function SignUp() {
   const navigate = useNavigate();
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+
   const [error, setError] = useState("");
 
-  const handleClick = (e) => {
-    e.preventDefault();
-    let data = JSON.stringify({
-      name,
-      password,
-      email,
-    });
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    password: "",
+  });
 
-    axios
-      .post(`${BASEURL}/register`, data, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-      .then(function (response) {
-        console.log(response.data);
-        toast.success("Registered Succes!", {
-          position: "top-right",
-          autoClose: 3000,
-          hideProgressBar: false,
-          closeOnClick: true,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-        });
-        navigate("/signin");
-      })
-      .catch((error) => {
-        console.log(error.response.data);
-        setError(error.response.data);
-        setTimeout(() => {
-          setError("");
-        }, 5000);
-      });
+  //SignUp
+  const signupUser = async (e) => {
+    e.preventDefault();
+
+    const promise = account.create(
+      uuidv4(),
+      user.email,
+      user.password,
+      user.name
+    );
+    promise.then(
+      function (response) {
+        console.log(response);
+        navigate("/Signin");
+      },
+      function (error) {
+        console.log(error);
+        setError(error);
+      }
+    );
   };
 
   return (
@@ -56,7 +45,7 @@ function SignUp() {
         <h1 className="text-3xl font-semibold text-center text-purple-700 underline">
           Sign Up
         </h1>
-        <form onSubmit={handleClick} className="mt-6">
+        <form onSubmit={signupUser} className="mt-6">
           <div className="mb-2">
             <label
               for="name"
@@ -65,9 +54,13 @@ function SignUp() {
               Name
             </label>
             <input
-              value={name}
               type="text"
-              onChange={(e) => setName(e.target.value)}
+              onChange={(e) =>
+                setUser({
+                  ...user,
+                  name: e.target.value,
+                })
+              }
               className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
             />
           </div>
@@ -80,8 +73,12 @@ function SignUp() {
             </label>
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) =>
+                setUser({
+                  ...user,
+                  email: e.target.value,
+                })
+              }
               className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
             />
           </div>
@@ -94,15 +91,19 @@ function SignUp() {
             </label>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) =>
+                setUser({
+                  ...user,
+                  password: e.target.value,
+                })
+              }
               className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
             />
           </div>
-          {error && <span className="text-red-500">{error}</span>}
+          {error ? <h1 className="text-red-500">{error.message}</h1> : ""}
           <div className="mt-6">
             <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-700 rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600">
-              Register
+              Sign Up
             </button>
           </div>
         </form>

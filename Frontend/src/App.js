@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Dashboard from "./user/Dashboard";
 import SignIn from "./user/SignIn";
 import SignUp from "./user/SignUp";
+import Profile from "./user/Profile";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/signin" element={<SignIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="*" element={<h2>Page Donot Exist</h2>} />
       </Routes>
     </BrowserRouter>

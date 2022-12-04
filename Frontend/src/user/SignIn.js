@@ -3,71 +3,29 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-
-const BASEURL = "https://todoassignmentcrud-production.up.railway.app";
+import { account } from "../appwrite/appwriteConfig";
 
 function SignIn() {
   const navigate = useNavigate();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  const [error, setError] = useState();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (token) {
-      navigate("/dashboard");
-    }
-  }, [navigate]);
+  const [user, setUser] = useState({
+    email: "",
+    password: "",
+  });
 
-  const validateFields = () => {
-    if (email === "") {
-      setError("Email cannot be blank");
-      return false;
-    }
-    if (password === "") {
-      setError("Password cannot be blank");
-      return false;
-    }
-    return true;
-  };
-
-  const handleClick = (e) => {
+  const loginUser = async (e) => {
     e.preventDefault();
-    if (validateFields) {
-      let data = JSON.stringify({
-        password,
-        email,
-      });
-
-      axios
-        .post(`${BASEURL}/login`, data, {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        })
-        .then(function (response) {
-          console.log(response.data);
-          localStorage.setItem("token", response.data.token);
-          toast.success("Login Succes!", {
-            position: "top-right",
-            autoClose: 2000,
-            hideProgressBar: false,
-            closeOnClick: true,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-          });
-          navigate("/dashboard");
-        })
-        .catch((error) => {
-          console.log(error.response.data);
-          setError(error.response.data.message);
-          setTimeout(() => {
-            setError("");
-          }, 5000);
-        });
+    try {
+      await account.createEmailSession(user.email, user.password);
+      navigate("/profile");
+    } catch (error) {
+      console.log(error);
+      setError(error);
+      setTimeout(() => {
+        setError("");
+      }, 3000);
     }
   };
 
@@ -77,7 +35,7 @@ function SignIn() {
         <h1 className="text-3xl font-semibold text-center text-purple-700 underline">
           Sign in
         </h1>
-        <form className="mt-6" onSubmit={handleClick}>
+        <form className="mt-6" onSubmit={loginUser}>
           <div className="mb-2">
             <label
               for="email"
@@ -87,8 +45,12 @@ function SignIn() {
             </label>
             <input
               type="email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
+              onChange={(e) =>
+                setUser({
+                  ...user,
+                  email: e.target.value,
+                })
+              }
               className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
             />
           </div>
@@ -101,13 +63,16 @@ function SignIn() {
             </label>
             <input
               type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) =>
+                setUser({
+                  ...user,
+                  password: e.target.value,
+                })
+              }
               className="block w-full px-4 py-2 mt-2 text-purple-700 bg-white border rounded-md focus:border-purple-400 focus:ring-purple-300 focus:outline-none focus:ring focus:ring-opacity-40"
             />
           </div>
-          {error && <span className="text-red-500">{error}</span>}
-
+          {error ? <h1 className="text-red-500">{error.message}</h1> : ""}
           <div className="mt-6">
             <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-purple-700 rounded-md hover:bg-purple-600 focus:outline-none focus:bg-purple-600">
               Login
