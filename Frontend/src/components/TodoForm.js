@@ -3,7 +3,7 @@ import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
-function Form() {
+function TodoForm({ id }) {
   //To Store the Value from FrontEnd
   const [title, setTitle] = useState("");
   console.log(title);
@@ -11,19 +11,16 @@ function Form() {
   const submitData = async () => {
     const data = {
       title: title,
+      userId: id,
     };
-    const res = await axios.post("/createTodo", data);
-    console.log(res);
-    toast.success("Created Todo Succesfully !", {
-      position: "bottom-right",
-      autoClose: 2000,
-      hideProgressBar: false,
-      closeOnClick: true,
-      pauseOnHover: true,
-      draggable: true,
-      progress: undefined,
-      theme: "light",
-    });
+    const res = await axios
+      .post(`/createTodo`, data)
+      .then((res) => {
+        console.log(res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   //Handle Default
@@ -35,7 +32,7 @@ function Form() {
 
   return (
     <div>
-      <form onSubmit={handleSubmit}>
+      <form>
         <section className="text-gray-600 body-font relative">
           <div className="container px-5 py-8 mx-auto">
             <div className="flex flex-col text-center justify-items-center mx-auto w-full mb-6">
@@ -65,6 +62,7 @@ function Form() {
                 </div>
                 <div className="p-2 w-full">
                   <button
+                    onClick={handleSubmit}
                     type="submit"
                     className="flex  text-white bg-indigo-500 border-0 py-2 px-8 focus:outline-none hover:bg-indigo-600 rounded text-lg"
                   >
@@ -81,4 +79,4 @@ function Form() {
   );
 }
 
-export default Form;
+export default TodoForm;

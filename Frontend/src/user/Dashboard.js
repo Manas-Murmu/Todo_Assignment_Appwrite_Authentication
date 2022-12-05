@@ -1,4 +1,4 @@
-import Form from "../components/Form";
+import Form from "../components/TodoForm";
 import TodoList from "../components/TodoList";
 
 function Dashboard() {

@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import { account } from "../appwrite/appwriteConfig";
-import { useNavigate, Link } from "react-router-dom";
-import Dashboard from "./Dashboard";
+import { useNavigate } from "react-router-dom";
+import TodoForm from "../components/TodoForm";
+
 import SignIn from "./SignIn";
+import TodoList from "../components/TodoList";
+import { FaPray } from "react-icons/fa";
 
 function Profile() {
   const navigate = useNavigate();
@@ -44,10 +47,12 @@ function Profile() {
 
       {userDetails ? (
         <div>
-          <h1 className="font-bold text-center text-2xl">
-            Welcome {userDetails.name.toUpperCase()}
+          <h1 className="font-bold text-center text-3xl">
+            Welcome <span className="text-green-500"> {userDetails.name}</span>
           </h1>
-          <Dashboard />
+          <p className="text-center font-semibold">Create Your Todo and Task</p>
+          <TodoForm id={userDetails.$id} />
+          <TodoList id={userDetails.$id} />
         </div>
       ) : (
         <SignIn />

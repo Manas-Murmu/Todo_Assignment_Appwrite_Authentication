@@ -12,7 +12,7 @@ const router = express.Router();
 
 router.get("/", home);
 router.post("/createTodo", createTodo);
-router.get("/getAllTodos", getAllTodos);
+router.get("/getAllTodos/:userId", getAllTodos);
 router.get("/getSingleTodo/:id", getSingleTodo);
 router.delete("/deleteATodo/:id", deleteATodo);
 router.put("/editATodo/:id", editATodo);

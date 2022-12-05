@@ -6,14 +6,14 @@ exports.home = (req, res) => {
 
 exports.createTodo = async (req, res) => {
   try {
-    const { title, tasks } = req.body;
+    const { title, userId } = req.body;
     if (!title) {
       throw new Error("Title is Required");
     }
 
     const newTodo = new Todo({
       title: req.body.title,
-      tasks: req.body.tasks,
+      userId: req.body.userId,
     });
 
     const createdNewTodo = await newTodo.save();
@@ -31,7 +31,9 @@ exports.createTodo = async (req, res) => {
 
 exports.getAllTodos = async (req, res) => {
   try {
-    const allTodos = await Todo.find();
+    const userId = req.params.userId;
+    console.log(userId);
+    const allTodos = await Todo.find({ userId });
     res.status(200).json({
       success: true,
       allTodos,

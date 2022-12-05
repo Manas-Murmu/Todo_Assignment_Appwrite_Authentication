@@ -11,7 +11,7 @@ import {
   FaSort,
 } from "react-icons/fa";
 
-function TodoList() {
+function TodoList({ id }) {
   const [todosData, setTodosData] = useState("");
   const [taskData, setTaskData] = useState("");
   const [taskId, setTaskId] = useState("");
@@ -20,7 +20,8 @@ function TodoList() {
   const [order, setOrder] = useState("ASC");
 
   const fetchUserData = async () => {
-    const response = await axios.get("/getAllTodos");
+    const response = await axios.get(`getAllTodos/${id}`);
+    console.log(response);
     setTodosData(response.data.allTodos);
   };
 
